@@ -1,1 +1,288 @@
 
+                 <p>Manage all reservations.</p>
+            </div>
+
+            <button class="primary-btn" onclick="openBooking()">+ New Booking</button>
+        </div>
+
+        <div class="panel">
+            <div class="search-bar">
+                <input type="text" id="bookingSearch"
+                       placeholder="🔎 Search guest or room..."
+                       onkeyup="searchBookings()">
+            </div>
+
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Guest</th>
+                            <th>Room</th>
+                            <th>Check-in</th>
+                            <th>Check-out</th>
+                            <th>Amount</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="bookingTable"></tbody>
+                </table>
+            </div>
+        </div>
+
+    </section>
+
+
+    <!-- GUESTS -->
+    <section id="guests" class="page">
+
+        <div class="page-head">
+            <div>
+                <h2>Guest Management</h2>
+                <p>View and manage hotel guests.</p>
+            </div>
+
+            <button class="primary-btn" onclick="addGuest()">+ Add Guest</button>
+        </div>
+
+        <div class="panel">
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Guest</th>
+                            <th>Phone</th>
+                            <th>Email</th>
+                            <th>Room</th>
+                            <th>Stay</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="guestTable"></tbody>
+                </table>
+            </div>
+        </div>
+
+    </section>
+
+
+    <!-- RESTAURANT -->
+    <section id="restaurant" class="page">
+
+        <div class="page-head">
+            <div>
+                <h2>Restaurant</h2>
+                <p>Manage food orders and menu.</p>
+            </div>
+        </div>
+
+        <div class="food-grid">
+
+            <div class="food-card">
+                <div class="food-img">🍕</div>
+                <h3>Italian Pizza</h3>
+                <p>Fresh cheese & vegetables</p>
+                <strong>₹299</strong>
+                <button onclick="orderFood('Italian Pizza',299)">Add Order</button>
+            </div>
+
+            <div class="food-card">
+                <div class="food-img">🍔</div>
+                <h3>Classic Burger</h3>
+                <p>Cheese burger with fries</p>
+                <strong>₹199</strong>
+                <button onclick="orderFood('Classic Burger',199)">Add Order</button>
+            </div>
+
+            <div class="food-card">
+                <div class="food-img">🍛</div>
+                <h3>Special Thali</h3>
+                <p>Indian traditional meal</p>
+                <strong>₹249</strong>
+                <button onclick="orderFood('Special Thali',249)">Add Order</button>
+            </div>
+
+            <div class="food-card">
+                <div class="food-img">☕</div>
+                <h3>Hot Coffee</h3>
+                <p>Freshly brewed coffee</p>
+                <strong>₹99</strong>
+                <button onclick="orderFood('Hot Coffee',99)">Add Order</button>
+            </div>
+
+        </div>
+
+        <div class="panel order-panel">
+            <div class="panel-head">
+                <div>
+                    <h3>Current Orders</h3>
+                    <p>Restaurant orders</p>
+                </div>
+                <strong id="orderTotal">₹0</strong>
+            </div>
+
+            <div id="orders"></div>
+        </div>
+
+    </section>
+
+
+    <!-- BILLING -->
+    <section id="billing" class="page">
+
+        <div class="page-head">
+            <div>
+                <h2>Billing & Invoices</h2>
+                <p>Generate and manage guest invoices.</p>
+            </div>
+
+            <button class="primary-btn" onclick="generateInvoice()">Generate Invoice</button>
+        </div>
+
+        <div class="billing-layout">
+
+            <div class="panel">
+                <h3>Invoice Generator</h3>
+
+                <div class="form-grid">
+
+                    <div class="form-group">
+                        <label>Guest Name</label>
+                        <input id="billGuest" placeholder="Enter guest name">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Room Number</label>
+                        <input id="billRoom" placeholder="e.g. 101">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Room Charges</label>
+                        <input id="billRoomCharge" type="number" value="3000">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Food Charges</label>
+                        <input id="billFood" type="number" value="500">
+                    </div>
+
+                    <div class="form-group">
+                        <label>GST (%)</label>
+                        <input id="billGST" type="number" value="18">
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="invoice" id="invoice">
+                <div class="invoice-top">
+                    <div>
+                        <h2>GRANDSTAY</h2>
+                        <p>Luxury Hotel & Resort</p>
+                    </div>
+                    <span>INVOICE</span>
+                </div>
+
+                <hr>
+
+                <p>Guest: <strong id="invoiceGuest">Guest Name</strong></p>
+                <p>Room: <strong id="invoiceRoom">---</strong></p>
+
+                <div class="invoice-row">
+                    <span>Room Charges</span>
+                    <strong id="invoiceRoomCharge">₹0</strong>
+                </div>
+
+                <div class="invoice-row">
+                    <span>Food Charges</span>
+                    <strong id="invoiceFood">₹0</strong>
+                </div>
+
+                <div class="invoice-row">
+                    <span>GST</span>
+                    <strong id="invoiceTax">₹0</strong>
+                </div>
+
+                <hr>
+
+                <div class="invoice-total">
+                    <span>Total</span>
+                    <strong id="invoiceTotal">₹0</strong>
+                </div>
+
+                <p class="paid">✓ PAYMENT RECEIVED</p>
+            </div>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<!-- BOOKING MODAL -->
+<div class="modal" id="bookingModal">
+
+    <div class="modal-box">
+
+        <div class="modal-head">
+            <div>
+                <h2>New Booking</h2>
+                <p>Create a new hotel reservation.</p>
+            </div>
+
+            <button onclick="closeBooking()">✕</button>
+        </div>
+
+        <div class="form-grid">
+
+            <div class="form-group">
+                <label>Guest Name</label>
+                <input id="guestName" placeholder="Enter guest name">
+            </div>
+
+            <div class="form-group">
+                <label>Phone</label>
+                <input id="guestPhone" placeholder="Enter phone number">
+            </div>
+
+            <div class="form-group">
+                <label>Room</label>
+                <select id="bookingRoom">
+                    <option>101</option>
+                    <option>102</option>
+                    <option>103</option>
+                    <option>201</option>
+                    <option>202</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Check-in</label>
+                <input type="date" id="checkIn">
+            </div>
+
+            <div class="form-group">
+                <label>Check-out</label>
+                <input type="date" id="checkOut">
+            </div>
+
+            <div class="form-group">
+                <label>Guests</label>
+                <input type="number" id="guestCount" value="1" min="1">
+            </div>
+
+        </div>
+
+        <button class="primary-btn full-btn" onclick="saveBooking()">
+            Confirm Booking
+        </button>
+
+    </div>
+</div>
+
+
+<script src="abhimanyu.js"></script>
+</body>
+</html>
+
