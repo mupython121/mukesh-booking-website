@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>LibraPro | Library Management System</title>
+
+    <link rel="stylesheet" href="robby.css">
+</head>
+
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+
+    <div class="brand">
+        <div class="brand-icon">📚</div>
+
+        <div>
+            <h2>LibraPro</h2>
+            <span>Library Management</span>
+        </div>
+    </div>
+
+    <nav>
+
+        <button class="nav active" onclick="showPage('dashboard', this)">
+            📊 <span>Dashboard</span>
+        </button>
+
+        <button class="nav" onclick="showPage('books', this)">
+            📚 <span>Books</span>
+        </button>
+
+        <button class="nav" onclick="showPage('members', this)">
+            👥 <span>Members</span>
+        </button>
+
+        <button class="nav" onclick="showPage('issue', this)">
+            📖 <span>Issue / Return</span>
+        </button>
+
+        <button class="nav" onclick="showPage('history', this)">
+            📋 <span>History</span>
+        </button>
+
+    </nav>
+
+    <div class="sidebar-bottom">
+
+        <button onclick="toggleDarkMode()">
+            🌙 <span>Dark Mode</span>
+        </button>
+
+        <button onclick="resetLibrary()">
+            ⚠️ <span>Reset Data</span>
+        </button>
+
+    </div>
+
+</aside>
+
+
+<!-- MAIN -->
+<main class="main">
+
+    <!-- TOPBAR -->
+    <header class="topbar">
+
+        <div>
+            <h1 id="pageTitle">Dashboard</h1>
+            <p id="today"></p>
+        </div>
+
+        <div class="admin">
+
+            <div class="bell">
+                🔔
+            </div>
+
+            <div class="avatar">
+                LP
+            </div>
+
+            <div>
+                <strong>Administrator</strong>
+                <small>Library Manager</small>
+            </div>
+
+        </div>
+
+    </header>
+
+
+    <!-- ================= DASHBOARD ================= -->
+
+    <section id="dashboard" class="page active">
+
+        <div class="welcome">
+
+            <div>
+                <span class="welcome-label">
+                    LIBRARY MANAGEMENT
+                </span>
+
+                <h2>Welcome to LibraPro 👋</h2>
+
+                <p>
+                    Manage books, members, issues and returns
+                    from one professional dashboard.
+                </p>
+            </div>
+
+            <button
+                class="primary"
+                onclick="openIssueModal()">
+
+                + Issue Book
+
+            </button>
+
+        </div>
+
+
+        <!-- STATISTICS -->
+
+        <div class="stats">
+
+            <div class="stat-card">
+
+                <div class="stat-icon blue">
+                    📚
+                </div>
+
+                <div>
+                    <span>Total Books</span>
+                    <h2 id="totalBooks">0</h2>
+                    <small>Books in library</small>
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-icon green">
+                    📖
+                </div>
+
+                <div>
+                    <span>Available</span>
+                    <h2 id="availableBooks">0</h2>
+                    <small>Ready to issue</small>
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-icon orange">
+                    👥
+                </div>
+
+                <div>
+                    <span>Members</span>
+                    <h2 id="totalMembers">0</h2>
+                    <small>Registered members</small>
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-icon purple">
+                    📋
+                </div>
+
+                <div>
+                    <span>Issued</span>
+                    <h2 id="issuedBooks">0</h2>
+                    <small>Currently issued</small>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- DASHBOARD GRID -->
+
+        <div class="dashboard-grid">
+
+            <div class="panel">
+
+                <div class="panel-head">
+
+                    <div>
+                        <h3>Recent Transactions</h3>
+                        <p>Latest issue and return activity</p>
+                    </div>
+
+                    <button onclick="showPage('history')">
+                        View All
+                    </button>
+
+                </div>
+
+                <div class="table-container">
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+                                <th>Book</th>
+                                <th>Member</th>
+                                <th>Issue Date</th>
+                                <th>Status</th>
+                            </tr>
+
+                        </thead>
+
+                        <tbody id="recentTransactions"></tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+
+            <div class="panel">
+
+                <div class="panel-head">
+
+                    <div>
+                        <h3>Library Overview</h3>
+                        <p>Current collection status</p>
+                    </div>
+
+                </div>
+
+
+                <div class="overview">
+
+                    <div class="overview-item">
+                        <span>
+                            <i class="dot available"></i>
+                            Available
+                        </span>
+
+                        <strong id="overviewAvailable">
+                            0
+                        </strong>
+                    </div>
+
+
+                    <div class="overview-item">
+                        <span>
+                            <i class="dot issued"></i>
+                            Issued
+                        </span>
+
+                        <strong id="overviewIssued">
+                            0
+                        </strong>
+                    </div>
+
+
+                    <div class="overview-item">
+                        <span>
+                            <i class="dot overdue"></i>
+                            Overdue
+                        </span>
+
+                        <strong id="overviewOverdue">
+                            0
+                        </strong>
+                    </div>
+
+
+                    <div class="progress-area">
+
+                        <div class="progress-label">
+                            <span>Collection Usage</span>
+                            <b id="usagePercent">0%</b>
+                        </div>
+
+                        <div class="progress">
+                            <div id="usageBar"></div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ================= BOOKS ================= -->
+
+    <section id="books" class="page">
+
+        <div class="page-head">
+
+            <div>
+                <h2>Book Management</h2>
+                <p>Add, search and manage your library collection.</p>
+            </div>
+
+            <button class="primary" onclick="openBookModal()">
+                + Add Book
+            </button>
+
+        </div>
+
+
+        <div class="toolbar">
+
+            <input
+                id="bookSearch"
+                type="text"
+                placeholder="🔎 Search by title, author or ISBN..."
+                oninput="renderBooks()">
+
+            <select id="categoryFilter" onchange="renderBooks()">
+
+                <option value="all">All Categories</option>
+                <option value="Programming">Programming</option>
+                <option value="Database">Database</option>
+                <option value="Management">Management</option>
+                <option value="Novel">Novel</option>
+                <option value="Science">Science</option>
+
+            </select>
+
+        </div>
+
+
+        <div class="panel">
+
+            <div class="table-container">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+                            <th>ISBN</th>
+                            <th>Book</th>
+                            <th>Author</th>
+                            <th>Category</th>
+                            <th>Copies</th>
+                            <th>Available</th>
+                            <th>Action</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody id="booksTable"></tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ================= MEMBERS ================= -->
+
+    <section id="members" class="page">
+
+        <div class="page-head">
+
+            <div>
+                <h2>Member Management</h2>
+                <p>Manage registered library members.</p>
+            </div>
+
+            <button class="primary" onclick="addMember()">
+                + Add Member
+            </button>
+
+        </div>
+
+
+        <div class="toolbar">
+
+            <input
+                id="memberSearch"
+                placeholder="🔎 Search member..."
+                oninput="renderMembers()">
+
+        </div>
+
+
+        <div class="panel">
+
+            <div class="table-container">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+                            <th>ID</th>
+                            <th>Member</th>
+                            <th>Phone</th>
+                            <th>Email</th>
+                            <th>Books Issued</th>
+                            <th>Status</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody id="membersTable"></tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ================= ISSUE ================= -->
+
+    <section id="issue" class="page">
+
+        <div class="page-head">
+
+            <div>
+                <h2>Issue & Return</h2>
+                <p>Issue books and process returns.</p>
+            </div>
+
+            <button class="primary" onclick="openIssueModal()">
+                + Issue Book
+            </button>
+
+        </div>
+
+
+        <div class="panel">
+
+            <div class="panel-head">
+
+                <div>
+                    <h3>Active Issues</h3>
+                    <p>Currently issued books</p>
+                </div>
+
+            </div>
+
+
+            <div class="table-container">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+                            <th>Book</th>
+                            <th>Member</th>
+                            <th>Issue Date</th>
+                            <th>Due Date</th>
+                            <th>Fine</th>
+                            <th>Action</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody id="issueTable"></tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ================= HISTORY ================= -->
+
+    <section id="history" class="page">
+
+        <div class="page-head">
+
+            <div>
+                <h2>Transaction History</h2>
+                <p>Complete library issue and return records.</p>
+            </div>
+
+        </div>
+
+
+        <div class="panel">
+
+            <div class="table-container">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+                            <th>Book</th>
+                            <th>Member</th>
+                            <th>Issue Date</th>
+                            <th>Return Date</th>
+                            <th>Fine</th>
+                            <th>Status</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody id="historyTable"></tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<!-- ================= BOOK MODAL ================= -->
+
+<div class="modal" id="bookModal">
+
+    <div class="modal-box">
+
+        <div class="modal-head">
+
+            <div>
+                <h2>Add New Book</h2>
+                <p>Add a book to the library collection.</p>
+            </div>
+
+            <button onclick="closeModal('bookModal')">
+                ✕
+            </button>
+
+        </div>
+
+
+        <div class="form-grid">
+
+            <div class="form-group">
+                <label>ISBN</label>
+                <input id="bookISBN" placeholder="978-XXXXXXXXXX">
+            </div>
+
+            <div class="form-group">
+                <label>Book Title</label>
+                <input id="bookTitle" placeholder="Enter book title">
+            </div>
+
+            <div class="form-group">
+                <label>Author</label>
+                <input id="bookAuthor" placeholder="Enter author">
+            </div>
+
+            <div class="form-group">
+
+                <label>Category</label>
+
+                <select id="bookCategory">
+
+                    <option>Programming</option>
+                    <option>Database</option>
+                    <option>Management</option>
+                    <option>Novel</option>
+                    <option>Science</option>
+
+                </select>
+
+            </div>
+
+            <div class="form-group">
+
+                <label>Copies</label>
+
+                <input
+                    id="bookCopies"
+                    type="number"
+                    min="1"
+                    value="1">
+
+            </div>
+
+        </div>
+
+
+        <button class="primary full" onclick="saveBook()">
+            Add Book
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- ================= ISSUE MODAL ================= -->
+
+<div class="modal" id="issueModal">
+
+    <div class="modal-box">
+
+        <div class="modal-head">
+
+            <div>
+                <h2>Issue Book</h2>
+                <p>Issue an available book to a member.</p>
+            </div>
+
+            <button onclick="closeModal('issueModal')">
+                ✕
+            </button>
+
+        </div>
+
+
+        <div class="form-grid">
+
+            <div class="form-group">
+
+                <label>Select Book</label>
+
+                <select id="issueBook"></select>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>Select Member</label>
+
+                <select id="issueMember"></select>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>Issue Date</label>
+
+                <input type="date" id="issueDate">
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>Return Period</label>
+
+                <select id="loanDays">
+
+                    <option value="7">7 Days</option>
+                    <option value="14" selected>14 Days</option>
+                    <option value="21">21 Days</option>
+                    <option value="30">30 Days</option>
+
+                </select>
+
+            </div>
+
+        </div>
+
+
+        <button class="primary full" onclick="issueBook()">
+            Confirm Issue
+        </button>
+
+    </div>
+
+</div>
+
+
+<script src="garbage.js"></script>
+
+</body>
+</html>
+
